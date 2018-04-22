@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".GamePart"
     tools:showIn="@layout/app_bar_game_part">
 
     <LinearLayout
-        android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_width="0dp"
+        android:layout_height="491dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="12dp">
 
         <TextView
             android:id="@+id/textView_Time"
@@ -27,9 +28,9 @@
         <TableLayout
             android:id="@+id/main"
             android:layout_width="match_parent"
-            android:layout_height="362dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/darker_gray"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scrollbars="none|horizontal|vertical"
             android:showDividers="none"
             android:shrinkColumns="*"
@@ -1536,7 +1537,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="9" />
+
+            <Button
+                android:id="@+id/button_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_wrong"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:text="TextView" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
