@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,11 +26,15 @@ import android.widget.Button;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GamePart extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,11 +42,14 @@ public class GamePart extends AppCompatActivity
     TextView[][] textBox=new TextView[9][9];
     List <TextView> wrongItem=new ArrayList<TextView>();
     TextView darkText=null;
-
+    TextView textTime;//=(TextView) findViewById(R.id.textView_Time);
+    Toolbar toolbar;
+    String textTimeCache="";
     int light =Color.parseColor("#f5c59d") ;
     int dark =Color.parseColor("#deb887") ;
     int textColor=Color.parseColor("#23212b") ;
     int hardColor=Color.parseColor("#7d6030") ;
+    TimePrintHandler tph=new TimePrintHandler();
     private void dataIn(String[] data){
         for(int i=0;i<9;i++)
             for(int j=0;j<9;j++){
@@ -115,6 +124,22 @@ public class GamePart extends AppCompatActivity
                 }
             }
     }
+    private void nodeGet(){
+        textTime=(TextView) findViewById(R.id.textView_Time);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+//    private void timeControl(final TextView textTime){
+//        Timer timer = new Timer();
+//        final Date date = new Date();
+//        final SimpleDateFormat dateFormat= new SimpleDateFormat("mm:ss");
+//        TimerTask task =new TimerTask(){
+//            public void run(){
+//                //System.out.println("开始运行"); //在这写你要调用的方法
+//                textTime.setText(dateFormat.format(date));
+//            }
+//        };
+//        timer.scheduleAtFixedRate(task, new Date(),1000);//当前时间开始起动 每次间隔2秒再启动
+//    }
     class ButtonOnClick implements View.OnClickListener{
         @Override
         public void onClick(View v) {
@@ -158,12 +183,45 @@ public class GamePart extends AppCompatActivity
             darkText=target;
         }
     }
+    class TimePrintHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            textTime.setText(textTimeCache);
+        }
+    }
+    class TimeOut extends Thread{
+        private TextView target=null;
+        SimpleDateFormat dateFormat= new SimpleDateFormat("mm:ss");
+        Date originDate = new Date();
+        Timer timer = new Timer();
+//        public TimeOut(TextView args){
+//            super();
+//            target=args;
+//        }
+        TimerTask task =new TimerTask(){
+            public void run(){
+                System.out.println("开始运行"); //在这写你要调用的方法
+                Date date = new Date();
+                textTimeCache=dateFormat.format(date.getTime()-originDate.getTime());
+                tph.sendMessage(new Message());
+            }
+        };
+        public void run(){
+            timer.scheduleAtFixedRate(task, new Date(),1000);
+        }
+
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_part);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        nodeGet();
         setSupportActionBar(toolbar);
+        //timeControl(textTime);
+        TimeOut t=new TimeOut();
+        t.start();
+
 
         String[] data={
                 "*3*8*****",
